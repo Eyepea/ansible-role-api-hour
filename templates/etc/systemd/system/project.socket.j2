@@ -1,0 +1,13 @@
+# {{ ansible_managed }}
+
+[Unit]
+Description={{ ah_name }} socket
+
+[Socket]
+{% for socket in ah_sockets %}
+
+ListenStream={{ socket }}
+{% endfor %}
+
+[Install]
+WantedBy=sockets.target

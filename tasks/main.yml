@@ -1,0 +1,80 @@
+---
+
+- name: Install packages Debian
+  apt:
+    name: "{{item}}"
+    state: present
+  when: ansible_os_family == 'Debian'
+  with_items:
+    - git
+
+- name: Install packages CentOS
+  yum:
+    name: "{{item}}"
+    state: present
+  when: ansible_os_family == 'RedHat'
+  with_items:
+    - git
+
+- name: Clone project
+  git:
+    repo: "{{ ah_git_url }}"
+    dest: "/opt/{{ ah_name }}"
+    force: yes
+    version: "{{ ah_version }}"
+  notify:
+   - Restart service
+
+- name: Link directories
+  file:
+    src: "/opt/{{ ah_name }}/etc"
+    dest: "/etc/{{ ah_name }}"
+    state: link
+
+- name: Install python
+  include_role:
+    name: pyslackers.python
+  vars:
+    virtualenvs:
+      "{{ ah_name }}":
+        path: "/opt/{{ ah_name }}/.env"
+        version: "{{ ah_python_version }}"
+        requirements: "/opt/{{ ah_name }}/{{ ah_requirements_path }}"
+
+- name: Create systemd directories
+  file:
+    path: /etc/systemd/system
+    state: directory
+
+- name: Configure systemd socket
+  template:
+    src: etc/systemd/system/project.socket.j2
+    dest: "/etc/systemd/system/{{ ah_name }}.socket"
+    force: yes
+  notify:
+    - Restart socket
+
+- name: Enable systemd socket
+  tags:
+    - travis-exempt
+  systemd:
+    daemon_reload: yes
+    name: "{{ ah_name }}.socket"
+    enabled: True
+    masked: False
+
+- name: Configure systemd service
+  template:
+    src: etc/systemd/system/project.service.j2
+    dest: "/etc/systemd/system/{{ ah_name }}.service"
+    force: yes
+  notify:
+    - Restart service
+
+- name: Enable systemd service
+  tags:
+    - travis-exempt
+  systemd:
+    name: "{{ ah_name }}.service"
+    enabled: True
+    masked: False

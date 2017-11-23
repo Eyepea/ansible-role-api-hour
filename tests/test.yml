@@ -1,0 +1,9 @@
+---
+
+- hosts: localhost
+  vars:
+    ah_name: api-hour-demo
+    ah_git_url: https://github.com/Eyepea/api-hour-demo.git
+    ah_python_version: 3.6.3
+  roles:
+    - ansible-role-api-hour
