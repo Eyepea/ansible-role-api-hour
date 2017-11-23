@@ -1,7 +1,7 @@
 eyepea.api-hour
 ========
 
-[![Build Status](https://travis-ci.org/eyepea/ansible-role-api-hour.svg?branch=master)](https://travis-ci.org/eyepea/ansible-role-api-hour)
+[![Build Status](https://travis-ci.org/Eyepea/ansible-role-api-hour.svg?branch=master)](https://travis-ci.org/Eyepea/ansible-role-api-hour)
 
 Ansible role to install and configure an [API-Hour](https://github.com/Eyepea/API-Hour) daemon.
 
@@ -23,7 +23,7 @@ $ git submodule add -b master https://github.com/eyepea/ansible-role-api-hour.gi
 Requirements
 ------------
 
-The [pyslakcers.python](https://github.com/pyslackers/ansible-role-python) is required to install python. Install it 
+The [pyslackers.python](https://github.com/pyslackers/ansible-role-python) is required to install python. Install it 
 with one of these commands:
 
 ```bash
