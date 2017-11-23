@@ -1,0 +1,30 @@
+# {{ ansible_managed }}
+
+[Unit]
+Description={{ ah_name }} daemon
+Requires={{ ah_name }}.socket
+After=network.target
+AssertPathExists=/opt/{{ ah_name }}/.env/bin/api_hour
+AssertPathExists=/etc/{{ ah_name }}
+AssertPathExists=/opt/{{ ah_name }}/{{ ah_name }}/__init__.py
+
+[Service]
+Type=simple
+PIDFile=/run/lock/{{ ah_name }}.pid
+User=root
+Group=root
+Environment="PYTHONPATH=."
+Environment="PYTHONUNBUFFERED=true"
+WorkingDirectory=/opt/{{ ah_name }}
+ExecStart=/opt/{{ ah_name }}/.env/bin/api_hour -ac {{ ah_name }}:Container
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+PrivateTmp=true
+Restart=always
+RestartSec=4
+KillSignal=SIGTERM
+SendSIGKILL=yes
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target
