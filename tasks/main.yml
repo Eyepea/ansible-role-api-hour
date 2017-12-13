@@ -27,7 +27,7 @@
 
 - name: Link directories
   file:
-    src: "/opt/{{ ah_name }}/etc"
+    src: "/opt/{{ ah_name }}/etc/{{ ah_name }}"
     dest: "/etc/{{ ah_name }}"
     state: link
 
