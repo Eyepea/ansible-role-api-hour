@@ -43,6 +43,8 @@ Role Variables
 * `ah_version`: Version to clone (default to `master`).
 * `ah_requirements_path`: Path to python requirements file (default to `requirements.txt`).
 * `ah_sockets`: List of listening sockets (default to `[0.0.0.0:8000]`).
+* `ah_systemd_socket_template`: Custom template for systemd socket (default to `etc/systemd/system/project.socket.j2`).
+* `ah_systemd_service_template`: Custom template for systemd service (default to `etc/systemd/system/project.service.j2`).
 
 Example Playbook
 ----------------
