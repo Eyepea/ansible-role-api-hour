@@ -65,6 +65,8 @@
     - Restart service
 
 - name: Systemd daemon-reload
+  tags:
+    - travis-exempt
   systemd:
     daemon-reload: yes
   when:
