@@ -68,7 +68,7 @@
   systemd:
     daemon-reload: yes
   when:
-    - "{{ ah_service_config }}.changed or {{ ah_socket_config }}.changed"
+    - "ah_service_config.changed or ah_socket_config.changed"
 
 - name: "Enable {{ ah_enabled }} systemd socket"
   tags:
