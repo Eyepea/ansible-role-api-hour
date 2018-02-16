@@ -2,5 +2,6 @@
 
 ah_version: master
 ah_requirements_path: requirements.txt
+ah_enabled: True
 ah_sockets:
   - 0.0.0.0:8000

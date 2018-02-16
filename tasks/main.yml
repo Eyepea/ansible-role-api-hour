@@ -51,30 +51,59 @@
     src: "{{ ah_systemd_socket_template | default('etc/systemd/system/project.socket.j2') }}"
     dest: "/etc/systemd/system/{{ ah_name }}.socket"
     force: yes
+  register: ah_socket_config
   notify:
     - Restart socket
-
-- name: Enable systemd socket
-  tags:
-    - travis-exempt
-  systemd:
-    daemon_reload: yes
-    name: "{{ ah_name }}.socket"
-    enabled: True
-    masked: False
 
 - name: Configure systemd service
   template:
     src: "{{ ah_systemd_service_template | default('etc/systemd/system/project.service.j2') }}"
     dest: "/etc/systemd/system/{{ ah_name }}.service"
     force: yes
+  register: ah_service_config
   notify:
     - Restart service
 
-- name: Enable systemd service
+- name: Systemd daemon-reload
+  tags:
+    - travis-exempt
+  systemd:
+    daemon-reload: yes
+  when:
+    - "ah_service_config.changed or ah_socket_config.changed"
+
+- name: "Enable {{ ah_enabled }} systemd socket"
+  tags:
+    - travis-exempt
+  systemd:
+    name: "{{ ah_name }}.socket"
+    enabled: "{{ ah_enabled }}"
+    masked: False
+
+- name: "Enable {{ ah_enabled }} systemd service"
   tags:
     - travis-exempt
   systemd:
     name: "{{ ah_name }}.service"
-    enabled: True
+    enabled: "{{ ah_enabled }}"
     masked: False
+
+- name: Start systemd socket
+  tags:
+    - travis-exempt
+  systemd:
+    name: "{{ ah_name }}.socket"
+    masked: False
+    state: started
+  when:
+    - ah_enabled
+
+- name: Start systemd service
+  tags:
+    - travis-exempt
+  systemd:
+    name: "{{ ah_name }}.service"
+    masked: False
+    state: started
+  when:
+    - ah_enabled

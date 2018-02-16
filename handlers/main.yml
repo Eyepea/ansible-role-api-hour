@@ -3,13 +3,15 @@
 - name: Restart socket
   systemd:
     name: "{{ ah_name }}.socket"
-    daemon-reload: True
     state: restarted
-  when: "'travis' not in group_names"
+  when:
+    - "'travis' not in group_names"
+    - "{{ ah_enabled }}"
 
 - name: Restart service
   systemd:
     name: "{{ ah_name }}.service"
-    daemon-reload: True
     state: restarted
-  when: "'travis' not in group_names"
+  when:
+    - "'travis' not in group_names"
+    - "{{ ah_enabled }}"
