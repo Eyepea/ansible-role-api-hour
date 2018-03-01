@@ -6,7 +6,7 @@
     state: restarted
   when:
     - "'travis' not in group_names"
-    - "{{ ah_enabled }}"
+    - "ah_enabled"
 
 - name: Restart service
   systemd:
@@ -14,4 +14,4 @@
     state: restarted
   when:
     - "'travis' not in group_names"
-    - "{{ ah_enabled }}"
+    - "ah_enabled"
